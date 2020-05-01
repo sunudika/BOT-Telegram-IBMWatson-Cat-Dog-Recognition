@@ -4,9 +4,10 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\BotManFactory;
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Drivers\Telegram\TelegramDriver;
+use BotMan\BotMan\Messages\Attachments\Image;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/vendor/autoload.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/database/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/database/config.php';
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -25,61 +26,49 @@ $botman = BotManFactory::create($configs);
 
 $botman->group(['recipient' => '-1001307666764'], function(Botman $bot) { //'-1001184380882' grup api
 
-    $bot->hears("/start@BitValueBot", function (BotMan $bot) {
+    $bot->hears("/start@CatnDogBot", function (BotMan $bot) {
         $user = $bot->getUser();
         $firstname = $user->getFirstName();
         $bot->reply("Willkommen $firstname 😊");
     });
 
-    $bot->hears("{chat}", function (BotMan $bot){
-        include "functions/request.php"; 
-    });
+    // $bot->hears("/cek {url}", function (BotMan $bot, $url){
+    //     require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/getter.php';
+    // require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/IBM_API.php';
 
-    $bot->hears("/cek_data@BitValueBot", function (BotMan $bot){
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/functions/getter.php';
-        $message = getMessage();
-        $bot->reply($message);
-    });
+    // $classification = classifyImage($url);
+    // include "functions/request.php"; 
 
-    $bot->hears("/kenal {nama}, {npm}", function (BotMan $bot, $nama, $npm) {
-        $bot->reply("Halo! $nama, $npm");
-    });
+    // $message = getMessage($url);
+    // $bot->reply($message);
+    // });
 
-    $bot->hears("/help@BitValueBot", function (BotMan $bot) {
-        $bot->reply("bot ini mencatat frekuensi chat setiap user yang menggunakan command" . PHP_EOL . "/start@BitValueBot - untuk mendapat sapaan" . PHP_EOL . 
-        "/cek_data@BitValueBot - untuk melihat frekuensi chat semua user" . PHP_EOL . "/help@BitValueBot - untuk mendapatkan bantuan");
+    $bot->hears("/help@CatnDogBot", function (BotMan $bot) {
+        $bot->reply("Bot ini mengklasifikasikan gambar kucing dan anjing" . PHP_EOL . "/start - untuk mendapat sapaan" . PHP_EOL . 
+        "/cek {url} - untuk mengecek gambar" . PHP_EOL . "/help - untuk mendapatkan bantuan");
     });
 });
 
 $botman->hears("/start", function (BotMan $bot) {
     $user = $bot->getUser();
     $firstname = $user->getFirstName();
-    $id_user = $user->getId();
-    $bot->reply("Willkommen $firstname ($id_user) 😊");
+    $bot->reply("Willkommen $firstname 😊");
 });
 
-$botman->hears("/kenal {nama}, {npm}", function (BotMan $bot, $nama, $npm) {
-    $bot->reply("Halo! $nama, $npm");
-});
+$botman->hears("/cek {url}", function (BotMan $bot, $url){
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/getter.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/IBM_API.php';
 
-$botman->hears("{chat}", function (BotMan $bot){
+    $classification = classifyImage($url);
     include "functions/request.php"; 
-    // $message = "IDmu: " . $dataUser->id_user . PHP_EOL;
-    // $message .= "Usernamemu: " . $dataUser->username . PHP_EOL;
-    // $message .= "Namamu: " . $dataUser->name . PHP_EOL;
-    // $message .= "Frekuensimu: " . $dataUser->frequency . PHP_EOL;
-    // $bot->reply($message);
-});
 
-$botman->hears("/cek_data", function (BotMan $bot){
-    require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/functions/getter.php';
-    $message = getMessage();
+    $message = getMessage($url);
     $bot->reply($message);
 });
 
 $botman->hears("/help", function (BotMan $bot) {
-        $bot->reply("bot ini mencatat frekuensi chat setiap user yang menggunakan command" . PHP_EOL . "/start - untuk mendapat sapaan" . PHP_EOL . 
-        "/cek_data - untuk melihat frekuensi chat semua user" . PHP_EOL . "/help - untuk mendapatkan bantuan");
+        $bot->reply("Bot ini mengklasifikasikan gambar kucing dan anjing" . PHP_EOL . "/start - untuk mendapat sapaan" . PHP_EOL . 
+        "/cek {url} - untuk mengecek gambar" . PHP_EOL . "/help - untuk mendapatkan bantuan");
     });
 
 $botman->listen();

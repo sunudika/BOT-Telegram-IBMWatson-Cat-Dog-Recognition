@@ -1,14 +1,9 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/functions/Chat.php';
-    
-$user = $bot->getUser();
-$id_user = $user->getId();
-$dataDB     = ChatTele\getUserTodayData($id_user);
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/Image.php';
 
-$dataUser = ChatTele\dataDefault($user);
+$dataDB     = ImageTele\getImageData($url);
 
 if (!(array) $dataDB):
-    ChatTele\insertNewRow($dataUser);
-elseif (ChatTele\isDBExpired($dataDB, $dataUser)):
-    ChatTele\updateTodayData($dataDB->id, $dataDB->frequency, $dataUser);
+    $dataImage = ImageTele\dataDefault($classification->animal, $classification->score,$url);
+    ImageTele\insertNewRow($dataImage);
 endif;

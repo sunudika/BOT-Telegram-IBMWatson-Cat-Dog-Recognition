@@ -1,26 +1,28 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/bot-telegram-counter/database/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/database/config.php';
 
-date_default_timezone_set('Asia/Jakarta');
-
-function getMessage() {
+function getMessage($url) {
     global $connection;
 
-    $querySelectLastData = "SELECT username, frequency, updated_at FROM chat WHERE DATE(created_at) = CURDATE() ORDER BY updated_at ASC";
-    $resultQuery         = mysqli_query($connection, $querySelectLastData);
+    $querySelectLastData    = "SELECT * FROM image WHERE url = '$url'";
+    $resultQuery            = mysqli_query($connection, $querySelectLastData);
+    $resultImage            = (object) mysqli_fetch_assoc($resultQuery);
 
     $message = "";
-
-    while($resultLastDataId = mysqli_fetch_assoc($resultQuery)) {
-        $resultToday = (object) $resultLastDataId;
-
-        $message .= "Username: " . $resultToday->username . PHP_EOL;
-        $message .= "Frekuensi: " . $resultToday->frequency . PHP_EOL . PHP_EOL;
-        $last = strtotime($resultToday->updated_at);
+    if ($resultImage->animal == "dog") {
+        $resultImage->animal = "Anjing";
+        $message .= "Hewan tersebut adalah " . $resultImage->animal . PHP_EOL;
+        $message .= "Akurasi " . $resultImage->score*100 . "%";
+    } elseif ($resultImage->animal == "cat") {
+        $resultImage->animal = "Kucing";
+        $message .= "Hewan tersebut adalah " . $resultImage->animal . PHP_EOL;
+        $message .= "Akurasi " . $resultImage->score*100 . "%";
+    } else {
+        $resultImage->animal = "tidak berhasil dikenali oleh Watson";
+        $message .= "Hewan tersebut adalah " . $resultImage->animal . PHP_EOL;
     }
     
-    $message .= "Pembaruan terakhir hari ini pada pukul " . date('H:i', $last);
     
     return $message;
 }
