@@ -31,6 +31,7 @@
         while($i < count($extraction)) {
             if ($extraction[$i]->class == 'cat') {
                 $animal = "cat";
+                $score = $extraction[$i]->score;
             break;
             } elseif ($extraction[$i]->class == 'dog'){
                 $animal = "dog";
