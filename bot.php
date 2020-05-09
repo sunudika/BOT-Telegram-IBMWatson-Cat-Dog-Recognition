@@ -58,8 +58,7 @@ $botman->hears("/cek {url}", function (BotMan $bot, $url){
     require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/getter.php';
     require_once $_SERVER['DOCUMENT_ROOT'] . '/BOT-Telegram-IBMWatson-Cat-Dog-Recognition/functions/IBM_API.php';
 
-    $classification = classifyImage($url);
-    include "functions/request.php"; 
+    include "functions/request.php";
 
     $message = getMessage($url);
     $bot->reply($message);
