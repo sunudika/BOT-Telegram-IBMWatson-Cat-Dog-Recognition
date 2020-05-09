@@ -69,4 +69,9 @@ $botman->hears("/help", function (BotMan $bot) {
         "/cek {url} - untuk mengecek gambar" . PHP_EOL . "/help - untuk mendapatkan bantuan");
     });
 
+$botman->fallback(function (BotMan $bot) {
+    $message = $bot->getMessage()->getText();
+    $bot->reply("Perintah tidak dikenali '$message'");
+});
+
 $botman->listen();
