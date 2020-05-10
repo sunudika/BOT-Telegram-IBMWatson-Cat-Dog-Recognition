@@ -19,7 +19,7 @@ function getMessage($url) {
         $message .= "Hewan tersebut adalah " . $resultImage->animal . PHP_EOL;
         $message .= "Akurasi " . $resultImage->score*100 . "%";
     } else {
-        $resultImage->animal = "tidak berhasil dikenali oleh Watson";
+        $resultImage->animal = "tidak berhasil dikenali sebagai Anjing atau Kucing oleh IBM Watson";
         $message .= "Hewan tersebut adalah " . $resultImage->animal . PHP_EOL;
     }
     
