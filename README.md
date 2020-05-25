@@ -1,4 +1,4 @@
-# BOT Telegram Cat and Dog Recognition
+# Telegram BOT - Cat and Dog Recognition
 
 Bot ini mengklasifikasikan sebuah gambar yang diberikan apakah termasuk kucing atau anjing dengan memanfaatkan API IBM WATSON.
 
